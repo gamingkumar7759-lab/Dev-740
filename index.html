@@ -13,7 +13,6 @@ body {
     overflow:hidden;
 }
 
-/* MATRIX BACKGROUND */
 canvas {
     position:fixed;
     top:0;
@@ -21,7 +20,6 @@ canvas {
     z-index:0;
 }
 
-/* LOGIN PAGE */
 #loginPage{
     position:fixed;
     width:100%;
@@ -54,7 +52,6 @@ button{
     cursor:pointer;
 }
 
-/* MAIN */
 #main{
     display:none;
     text-align:center;
@@ -69,7 +66,6 @@ h1{
     text-shadow:0 0 15px gold;
 }
 
-/* NOTEPAD */
 #notepad{
     margin-top:20px;
     width:80%;
@@ -94,7 +90,6 @@ textarea{
     margin-top:10px;
     padding:10px;
 }
-
 </style>
 </head>
 
@@ -116,6 +111,8 @@ textarea{
 <!-- MAIN -->
 <div id="main">
     <h1>DEVDAT KUMAR</h1>
+
+    <button onclick="logout()">Logout ❌</button>
 
     <div id="notepad">
         <h2>🗓️ My Notes</h2>
@@ -165,33 +162,59 @@ function draw(){
 
 setInterval(draw, 35);
 
+/* USER SYSTEM */
+let currentUser = "";
+
 /* LOGIN */
 function login(){
     let u = document.getElementById("user").value;
     let p = document.getElementById("pass").value;
 
     if(u === "dev123" && p === "dev123"){
+        currentUser = u;
+        localStorage.setItem("currentUser", currentUser);
+
         document.getElementById("loginPage").style.display = "none";
         document.getElementById("main").style.display = "block";
+
+        loadNotes();
     } else {
         document.getElementById("msg").innerText = "❌ Wrong Login";
     }
 }
 
-/* NOTEPAD */
+/* LOGOUT */
+function logout(){
+    currentUser = "";
+    localStorage.removeItem("currentUser");
+
+    document.getElementById("main").style.display = "none";
+    document.getElementById("loginPage").style.display = "flex";
+}
+
+/* ADD NOTE */
 function addNote(){
     let text = noteInput.value;
-    let notes = JSON.parse(localStorage.getItem("notes")||"[]");
+
+    if(currentUser === ""){
+        alert("Login first!");
+        return;
+    }
+
+    let notes = JSON.parse(localStorage.getItem(currentUser + "_notes") || "[]");
 
     notes.push(text);
-    localStorage.setItem("notes", JSON.stringify(notes));
+    localStorage.setItem(currentUser + "_notes", JSON.stringify(notes));
 
     noteInput.value="";
     loadNotes();
 }
 
+/* LOAD NOTES */
 function loadNotes(){
-    let notes = JSON.parse(localStorage.getItem("notes")||"[]");
+    if(currentUser === "") return;
+
+    let notes = JSON.parse(localStorage.getItem(currentUser + "_notes") || "[]");
     notesList.innerHTML="";
 
     notes.forEach((n,i)=>{
@@ -202,19 +225,33 @@ function loadNotes(){
     });
 }
 
+/* DELETE NOTE */
 function deleteNote(i){
-    let notes = JSON.parse(localStorage.getItem("notes")||"[]");
+    let notes = JSON.parse(localStorage.getItem(currentUser + "_notes") || "[]");
     notes.splice(i,1);
-    localStorage.setItem("notes", JSON.stringify(notes));
+    localStorage.setItem(currentUser + "_notes", JSON.stringify(notes));
     loadNotes();
 }
 
+/* CLEAR ALL */
 function clearAll(){
-    localStorage.removeItem("notes");
+    localStorage.removeItem(currentUser + "_notes");
     loadNotes();
 }
 
-window.onload = loadNotes;
+/* AUTO LOGIN */
+window.onload = function(){
+    let savedUser = localStorage.getItem("currentUser");
+
+    if(savedUser){
+        currentUser = savedUser;
+
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("main").style.display = "block";
+
+        loadNotes();
+    }
+}
 
 </script>
 
