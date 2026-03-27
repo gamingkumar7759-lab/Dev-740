@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Devdat Hacker Site</title>
+<title>Devdat Kumar</title>
 
 <style>
 body {
@@ -13,7 +13,7 @@ body {
     overflow:hidden;
 }
 
-/* MATRIX CANVAS */
+/* MATRIX BACKGROUND */
 canvas {
     position:fixed;
     top:0;
@@ -66,6 +66,7 @@ button{
 h1{
     color:gold;
     font-size:40px;
+    text-shadow:0 0 15px gold;
 }
 
 /* NOTEPAD */
@@ -114,7 +115,7 @@ textarea{
 
 <!-- MAIN -->
 <div id="main">
-    <h1>DEVDAT</h1>
+    <h1>DEVDAT KUMAR</h1>
 
     <div id="notepad">
         <h2>🗓️ My Notes</h2>
@@ -128,7 +129,7 @@ textarea{
 
 <script>
 
-/* MATRIX EFFECT FIXED */
+/* MATRIX EFFECT */
 let c = document.getElementById("matrix");
 let ctx = c.getContext("2d");
 
@@ -148,7 +149,7 @@ function draw(){
     ctx.fillStyle = "rgba(0, 100, 0, 0.1)";
     ctx.fillRect(0, 0, c.width, c.height);
 
-    ctx.fillStyle = "#000"; // black symbols
+    ctx.fillStyle = "#000";
     ctx.font = fontSize + "px monospace";
 
     for(let i=0;i<drops.length;i++){
@@ -164,7 +165,7 @@ function draw(){
 
 setInterval(draw, 35);
 
-/* LOGIN FIXED */
+/* LOGIN */
 function login(){
     let u = document.getElementById("user").value;
     let p = document.getElementById("pass").value;
